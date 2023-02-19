@@ -2,6 +2,19 @@ from typing import Optional
 from pydantic import BaseModel
 
 
+class BankTransactionBase(BaseModel):
+    amount: int
+
+
+class BankTransactionCreate(BankTransactionBase):
+    pass
+
+
+class BankTransaction(BankTransactionBase):
+    class Config:
+        orm_mode = True
+
+
 class UserBase(BaseModel):
     first_name: str
     last_name: str
@@ -18,18 +31,5 @@ class User(UserBase):
     id: int
     transactions: list[BankTransaction]
 
-    class Config:
-        orm_mode = True
-
-
-class BankTransactionBase(BaseModel):
-    amount: int
-
-
-class BankTransactionCreate(BankTransactionBase):
-    pass
-
-
-class BankTransaction(BankTransactionBase):
     class Config:
         orm_mode = True
