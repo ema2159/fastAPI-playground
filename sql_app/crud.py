@@ -30,3 +30,10 @@ def get_user_by_email(db: Session, email: str) -> Optional[models.User]:
 
 def get_users(db: Session, skip: int = 0, limit: int = 100) -> list[models.User]:
     return db.query(models.User).offset(skip).limit(limit).all()
+
+
+# Delete
+def delete_user(db: Session, user_id: int) -> int:
+    users_found = db.query(models.User).filter(models.User.id == user_id).delete()
+    db.commit()
+    return users_found
