@@ -1,25 +1,16 @@
 from typing import Optional
 import faker
-from pydantic import BaseModel
+from sql_app.schemas import UserCreate
 import requests
 
 # Fake data
 fake = faker.Faker()
 
-
-class User(BaseModel):
-    first_name: str
-    last_name: str
-    email: str
-    address: Optional[str]
-    phone_num: Optional[str]
-
 # Request
-
 URL = "http://localhost:8000"
 
 for _ in range(100):
-    fake_user = User(
+    fake_user = UserCreate(
         first_name=fake.first_name(),
         last_name=fake.last_name(),
         email=fake.ascii_free_email(),
@@ -28,6 +19,6 @@ for _ in range(100):
     )
 
     user_dict = fake_user.dict()
-    req = requests.post(url=f"{URL}/user", json=user_dict)
+    req = requests.post(url=f"{URL}/users", json=user_dict)
 
     print(req.text)
