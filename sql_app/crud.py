@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 from typing import Optional
 from sqlalchemy.orm import Session
 
@@ -53,3 +54,19 @@ def delete_user(db: Session, user_id: int) -> int:
     users_found = db.query(models.User).filter(models.User.id == user_id).delete()
     db.commit()
     return users_found
+
+
+# Bank Transaction
+def create_bank_transaction(
+    db: Session, bank_transaction: schemas.BankTransactionCreate
+):
+    db_user = models.BankTransaction(
+        amount=bank_transaction.amount,
+        timestamp=datetime.now(),
+        sender_id=bank_transaction.sender_account_num,
+        receiver_id=bank_transaction.receiver_account_num,
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user

@@ -1,6 +1,6 @@
 from typing import Optional
 import faker
-from sql_app.schemas import UserCreate
+from sql_app.schemas import BankTransactionCreate, UserCreate
 import requests
 
 # Fake data
@@ -22,3 +22,13 @@ for _ in range(100):
     req = requests.post(url=f"{URL}/users", json=user_dict)
 
     print(req.text)
+
+
+# fake_bank_transaction = BankTransactionCreate(
+#     amount=100000,
+#     sender_account_num=47654946533844,
+#     receiver_account_num=125339437698456
+# )
+# req = requests.post(url=f"{URL}/bankTransactions", json=fake_bank_transaction.dict())
+
+# print(req.text)

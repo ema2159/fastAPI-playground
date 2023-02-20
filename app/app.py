@@ -40,3 +40,17 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     if not crud.delete_user(db, user_id):
         raise HTTPException(status_code=404, detail="Could not delete. User not found")
     return {"ok": True}
+
+
+# Bank Transactions
+@app.post("/bankTransactions", tags=["bankTransactionAPI"])
+def post_bank_transaction(
+    bank_transaction: schemas.BankTransactionCreate, db: Session = Depends(get_db)
+):
+    db_sender = crud.get_user(db, bank_transaction.sender_account_num)
+    db_receiver = crud.get_user(db, bank_transaction.receiver_account_num)
+    if not db_sender:
+        raise HTTPException(status_code=404, detail="Sender account does not exist")
+    if not db_receiver:
+        raise HTTPException(status_code=404, detail="Receiver account does not exist")
+    return crud.create_bank_transaction(db=db, bank_transaction=bank_transaction)

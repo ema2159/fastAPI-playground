@@ -4,6 +4,8 @@ from pydantic import BaseModel
 
 class BankTransactionBase(BaseModel):
     amount: int
+    sender_account_num: int
+    receiver_account_num: int
 
 
 class BankTransactionCreate(BankTransactionBase):

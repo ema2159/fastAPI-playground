@@ -1,5 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql.sqltypes import DateTime
 from .database import Base
 
 
@@ -13,15 +14,17 @@ class User(Base):
     address = Column(String)
     phone_num = Column(String)
 
-    # transactions = relationship("Transaction", back_populates=True)
+    transactions_sent = relationship("BankTransaction", foreign_keys="BankTransaction.sender_id")
+    transactions_received = relationship("BankTransaction", foreign_keys="BankTransaction.receiver_id")
 
+class BankTransaction(Base):
+    __tablename__ = "bank_transaction"
 
-# class Transaction(Base):
-#     __tablename__ = "transaction"
+    id = Column(Integer, primary_key=True, index=True)
+    amount = Column(Integer)
+    timestamp = Column(DateTime)
+    sender_id = Column(Integer, ForeignKey("user.id"))
+    receiver_id = Column(Integer, ForeignKey("user.id"))
 
-#     amount = Column(Integer)
-#     id = Column(Integer, primary_key=True, index=True)
-#     user1_id = Column(Integer, ForeignKey("user.id"))
-#     user2_id = Column(Integer, ForeignKey("user.id"))
-
-#     user = relationship("User", back_populates=True)
+    sender = relationship("User", foreign_keys=[sender_id], overlaps="transactions_sent")
+    receiver = relationship("User", foreign_keys=[receiver_id], overlaps="transactions_received")
