@@ -1,12 +1,28 @@
+import random
 from typing import Optional
 from sqlalchemy.orm import Session
-from sqlalchemy.orm.query import Query
 
 from . import models, schemas
 
+# User
 # Create
+def random_user_id(db: Session):
+    min = 0
+    max = 9999_9999_9999_9999
+    rand_id = random.randint(min, max)
+
+    while (
+        db.query(models.User).filter(models.User.id == rand_id).limit(1).first()
+        is not None
+    ):
+        rand_id = random.randint(min, max)
+
+    return rand_id
+
+
 def create_user(db: Session, user: schemas.UserCreate) -> models.User:
     db_user = models.User(
+        id=random_user_id(db),
         first_name=user.first_name,
         last_name=user.last_name,
         email=user.email,
