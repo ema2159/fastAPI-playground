@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, BigInteger
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import DateTime
 from .database import Base
@@ -7,7 +7,7 @@ from .database import Base
 class User(Base):
     __tablename__ = "user"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(BigInteger, primary_key=True, index=True)
     first_name = Column(String, index=True)
     last_name = Column(String, index=True)
     email = Column(String, unique=True)
@@ -23,8 +23,8 @@ class BankTransaction(Base):
     id = Column(Integer, primary_key=True, index=True)
     amount = Column(Integer)
     timestamp = Column(DateTime)
-    sender_id = Column(Integer, ForeignKey("user.id"))
-    receiver_id = Column(Integer, ForeignKey("user.id"))
+    sender_id = Column(BigInteger, ForeignKey("user.id"))
+    receiver_id = Column(BigInteger, ForeignKey("user.id"))
 
     sender = relationship("User", foreign_keys=[sender_id], overlaps="transactions_sent")
     receiver = relationship("User", foreign_keys=[receiver_id], overlaps="transactions_received")
