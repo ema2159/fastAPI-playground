@@ -16,6 +16,12 @@ def get_db():
         db.close()
 
 
+# Healthcheck
+@app.get("/")
+def get_root_healthcheck():
+    return {"Server running": "OK"}
+
+
 # Users
 @app.post("/users", tags=["userAPI"])
 def post_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
